@@ -24,7 +24,7 @@
 
   footer {
     align-self: stretch;
-    &.empty {
+    &.empty .progress {
       opacity: 0.5;
     }
   }
@@ -115,6 +115,7 @@
 
     &:disabled {
       cursor: not-allowed;
+      opacity: 0.5;
     }
 
     &.playButton {
