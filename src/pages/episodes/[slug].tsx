@@ -1,6 +1,7 @@
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { GetStaticPaths, GetStaticProps } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { usePlayer } from "../../contexts/PlayerContext";
@@ -29,6 +30,9 @@ export default function Episode({ episode }: EpisodeProps) {
   const { play } = usePlayer();
   return (
     <div className={styles.episode}>
+      <Head>
+        <title>{episode.title} | Podcastr</title>
+      </Head>
       <div className={styles.thumbnailContainer}>
         <Link href="/">
           <button type="button">
@@ -63,8 +67,24 @@ export default function Episode({ episode }: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { data } = await api.get("episodes", {
+    params: {
+      _limit: 12,
+      _sort: "publised_at",
+      _order: "desc",
+    },
+  });
+
+  const paths = data.map((episode) => {
+    return {
+      params: {
+        slug: episode.id,
+      },
+    };
+  });
+
   return {
-    paths: [],
+    paths,
     fallback: "blocking",
   };
 };
