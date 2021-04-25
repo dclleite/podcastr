@@ -14,7 +14,11 @@ export function Player() {
     episodeList,
     currentEpisodeIndex,
     isPlaying,
+    isLooping,
+    isShuffling,
     togglePlay,
+    toggleLoop,
+    toggleShuffle,
     setPlayingState,
     playNext,
     playPrevious,
@@ -81,6 +85,7 @@ export function Player() {
           <audio
             ref={audioRef}
             src={episode.url}
+            loop={isLooping}
             autoPlay
             onPlay={() => setPlayingState(true)}
             onPause={() => setPlayingState(false)}
@@ -88,7 +93,12 @@ export function Player() {
         )}
 
         <div className={styles.buttons}>
-          <button type="button" disabled={!episode}>
+          <button
+            type="button"
+            onClick={toggleShuffle}
+            className={isShuffling ? styles.isActive : ""}
+            disabled={!episode || episodeList.length === 1}
+          >
             <img src="/shuffle.svg" alt="Embaralhar" />
           </button>
           <button
@@ -113,7 +123,12 @@ export function Player() {
           <button type="button" disabled={!episode || !hasNext}>
             <img src="/play-next.svg" onClick={playNext} alt="Tocar próxima" />
           </button>
-          <button type="button" disabled={!episode}>
+          <button
+            type="button"
+            onClick={toggleLoop}
+            className={isLooping ? styles.isActive : ""}
+            disabled={!episode}
+          >
             <img src="/repeat.svg" alt="Repetir" />
           </button>
         </div>
